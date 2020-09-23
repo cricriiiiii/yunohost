@@ -23,11 +23,17 @@ do_pre_regen() {
         ssh_keys="$ssh_keys $(ls /etc/ssh/ssh_host_dsa_key 2>/dev/null || true)"
     fi
 
+    if [[ -z "$(yunohost user permission list -p main -a sftp --output-as plain)" ]]; then
+        sftp_secure="false"
+    else
+        sftp_secure="true"
+    fi
+
     # Support different strategy for security configurations
     export compatibility="$(yunohost settings get 'security.ssh.compatibility')"
-
     export ssh_keys
     export ipv6_enabled
+    export sftp_secure
     ynh_render_template "sshd_config" "${pending_dir}/etc/ssh/sshd_config"
 }
 

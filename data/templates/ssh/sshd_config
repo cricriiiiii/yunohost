@@ -64,8 +64,8 @@ PrintLastLog yes
 ClientAliveInterval 60
 AcceptEnv LANG LC_*
 
-# SFTP stuff
-Subsystem sftp internal-sftp
+# Disallow user without ssh or sftp permissions
+AllowGroups ssh.main sftp.main admins root
 
 # Forbid users from using their account SSH as a VPN (even if SSH login is disabled)
 AllowTcpForwarding no
@@ -79,6 +79,13 @@ Match User admin,root
     AllowStreamLocalForwarding yes
     PermitUserRC yes
 
+
+# SFTP stuff
+Subsystem sftp internal-sftp
+
+Match Group sftp.main
+        ForceCommand internal-sftp
+        ChrootDirectory /home/%u
 
 # root login is allowed on local networks
 # It's meant to be a backup solution in case LDAP is down and

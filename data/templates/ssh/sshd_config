@@ -67,28 +67,29 @@ AcceptEnv LANG LC_*
 # Disallow user without ssh or sftp permissions
 AllowGroups ssh.main sftp.main admins root
 
-# Forbid users from using their account SSH as a VPN (even if SSH login is disabled)
-AllowTcpForwarding no
-AllowStreamLocalForwarding no
-
-# Disable .ssh/rc, which could be edited (e.g. from Nextcloud or whatever) by users to execute arbitrary commands even if SSH login is disabled
-PermitUserRC no
+# Allow users to create tunnels or forwarding
+AllowTcpForwarding yes
+AllowStreamLocalForwarding yes
+PermitTunnel yes
+PermitUserRC yes
 
 # SFTP stuff
 Subsystem sftp internal-sftp
 
-Match Group sftp.main
+# Apply following instructions to user with sftp perm only
+Match Group sftp.main,!ssh.main
 ForceCommand internal-sftp
-ChrootDirectory /home/%u
-
-# SSH Tunnel and TCP forwarding
-Match Group ssh.tunnel,admins,root
-AllowTcpForwarding yes
-AllowStreamLocalForwarding yes
-
-# SSH RC file (.ssh/rc)
-Match Group admins,root
-PermitUserRC yes
+# We currently are not able to restrict /home/USER
+# So we chroot only on /home
+# See https://serverfault.com/questions/584986/bad-ownership-or-modes-for-chroot-directory-component
+#ChrootDirectory /home/%u
+ChrootDirectory /home
+# Forbid SFTP users from using their account SSH as a VPN (even if SSH login is disabled)
+AllowTcpForwarding no
+AllowStreamLocalForwarding no
+PermitTunnel no
+# Disable .ssh/rc, which could be edited (e.g. from Nextcloud or whatever) by users to execute arbitrary commands even if SSH login is disabled
+PermitUserRC no
 
 
 # root login is allowed on local networks

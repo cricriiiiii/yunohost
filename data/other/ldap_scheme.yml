@@ -81,3 +81,24 @@ depends_children:
             - permissionYnh
         groupPermission:
             - "cn=all_users,ou=groups,dc=yunohost,dc=org"
+    cn=ssh.main,ou=permission:
+        cn: ssh.main
+        gidNumber: "5003"
+        objectClass:
+            - posixGroup
+            - permissionYnh
+        groupPermission: []
+    cn=ssh.tunnel,ou=permission:
+        cn: ssh.tunnel
+        gidNumber: "5004"
+        objectClass:
+            - posixGroup
+            - permissionYnh
+        groupPermission: []
+    cn=sftp.main,ou=permission:
+        cn: sftp.main
+        gidNumber: "5005"
+        objectClass:
+            - posixGroup
+            - permissionYnh
+        groupPermission: []

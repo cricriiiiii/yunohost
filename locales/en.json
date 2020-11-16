@@ -619,6 +619,8 @@
     "user_deletion_failed": "Could not delete user {user}: {error}",
     "user_home_creation_failed": "Could not create 'home' folder for user",
     "user_unknown": "Unknown user: {user:s}",
+    "user_changepassword_success": "User password changed",
+    "user_changepassword_failed": "Could not change user password {user}: {error}",
     "user_update_failed": "Could not update user {user}: {error}",
     "user_updated": "User info changed",
     "yunohost_already_installed": "YunoHost is already installed",

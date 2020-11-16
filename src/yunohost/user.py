@@ -277,6 +277,48 @@ def user_delete(operation_logger, username, purge=False):
     logger.success(m18n.n('user_deleted'))
 
 
+@is_unit_operation([('username', 'user')])
+def user_changepassword(operation_logger, username, password):
+    """
+    Change user password
+
+    Keyword argument:
+        username -- Username of user to update
+        password -- New password to set
+
+    """
+    from yunohost.app import app_ssowatconf
+    from yunohost.utils.password import assert_password_is_strong_enough
+    from yunohost.utils.ldap import _get_ldap_interface
+
+    # Populate user informations
+    ldap = _get_ldap_interface()
+    attrs_to_fetch = ['givenName', 'sn', 'mail', 'maildrop']
+    result = ldap.search(base='ou=users,dc=yunohost,dc=org', filter='uid=' + username, attrs=attrs_to_fetch)
+    if not result:
+        raise YunohostError('user_unknown', user=username)
+
+    # Get modifications from arguments
+    new_attr_dict = {}
+
+    # Ensure sufficiently complex password
+    assert_password_is_strong_enough("user", password)
+
+    new_attr_dict['userPassword'] = [_hash_user_password(password)]
+
+    operation_logger.start()
+
+    try:
+        ldap.update('uid=%s,ou=users' % username, new_attr_dict)
+    except Exception as e:
+        raise YunohostError('user_changepassword_failed', user=username, error=e)
+
+    logger.success(m18n.n('user_changepassword_success'))
+    app_ssowatconf()
+
+    return {'username': username}
+
+
 @is_unit_operation([('username', 'user')], exclude=['change_password'])
 def user_update(operation_logger, username, firstname=None, lastname=None, mail=None,
                 change_password=None, add_mailforward=None, remove_mailforward=None,

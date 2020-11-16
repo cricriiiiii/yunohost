@@ -140,6 +140,22 @@ user:
                     help: Purge user's home and mail directories
                     action: store_true
 
+        ### user_changepassword()
+        changepassword:
+            action_help: Change a user password
+            api: PUT /users/<username>
+            arguments:
+                username:
+                    help: The username for which to change the password
+                -p:
+                    full: --password
+                    help: New user password
+                    extra:
+                        password: ask_password
+                        required: True
+                        pattern: *pattern_password
+                        comment: good_practices_about_user_password
+
         ### user_update()
         update:
             action_help: Update user informations

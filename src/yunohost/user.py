@@ -291,10 +291,9 @@ def user_changepassword(operation_logger, username, password):
     from yunohost.utils.password import assert_password_is_strong_enough
     from yunohost.utils.ldap import _get_ldap_interface
 
-    # Populate user informations
+    # Check user
     ldap = _get_ldap_interface()
-    attrs_to_fetch = ['givenName', 'sn', 'mail', 'maildrop']
-    result = ldap.search(base='ou=users,dc=yunohost,dc=org', filter='uid=' + username, attrs=attrs_to_fetch)
+    result = ldap.search(base='ou=users,dc=yunohost,dc=org', filter='uid=' + username)
     if not result:
         raise YunohostError('user_unknown', user=username)
 

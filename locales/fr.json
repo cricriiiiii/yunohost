@@ -153,8 +153,6 @@
     "user_deletion_failed": "Impossible de supprimer l’utilisateur {user} : {error}",
     "user_home_creation_failed": "Impossible de créer le dossier personnel de l’utilisateur",
     "user_unknown": "L’utilisateur {user:s} est inconnu",
-    "user_changepassword_success": "Le mot de passe de l'utilisateur a été modifié",
-    "user_changepassword_failed": "Impossible de changer le mot de passe de l’utilisateur {user} : {error}",
     "user_update_failed": "Impossible de mettre à jour l’utilisateur {user} : {error}",
     "user_updated": "L’utilisateur a été modifié",
     "yunohost_already_installed": "YunoHost est déjà installé",
